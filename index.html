@@ -52,6 +52,13 @@
 </body>
 
 <script>
+	/*
+	  - Use the test functions below to familiarize yourself with how to call on a dialog.
+	  - You'll find it is very similar to the old way; however, you must first declare and create a new object of the dialog you want to open.
+	  - Simple call open() on that object and pass in the appropriate parameters. The last parameter is always the function that will be called
+	    when Enter is pressed. This can either be a reference to a function or an anonymous function.
+	*/
+	
 	function testNumpad() {
 		var numpad = new NumberPad();
 		numpad.open(null, null, "Number Entry Pad", "How many beers to drink?", true, 10, result);
@@ -81,7 +88,7 @@
 	
 	function testStringPad() {
 		var stringPad = new StringPad();
-		stringPad.openStringPad("String Constant Entry", "Insert a string.", result);
+		stringPad.open("String Constant Entry", "Insert a string.", result);
 	}
 	
 	function testHexPad() {

@@ -276,7 +276,7 @@ function NumberPad() {
 }
 
 function StringPad() {
-	this.openStringPad = openStringPad;
+	this.open = open;
 	
 	var thisID = StringPad.nextDialogID;
 	StringPad.nextDialogID++;
@@ -304,7 +304,7 @@ function StringPad() {
 		</td>\
 		</table>';
 		
-	function openStringPad(title, instruction, callback) {
+	function open(title, instruction, callback) {
 		var dialogDiv = document.createElement("div");
 		dialogDiv.id = "stringPadDialog" + thisID;
 		dialogDiv.setAttribute("title", title);
