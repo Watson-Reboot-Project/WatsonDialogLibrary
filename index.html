@@ -1,0 +1,106 @@
+<html>
+<head>
+<link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.css">
+<link rel="stylesheet" href="css/Dialogs.css">
+<script src="js/jquery-1.10.2.js"></script>
+<script src="js/jquery-ui-1.10.4.custom.js"></script>
+<script src="js/WatsonDialogs.js"></script>
+
+<title>Watson Dialog Library</title>
+</head>
+<body>
+		<div>
+		<p> Default number pad with a reference to the function to be called when "Enter is clicked </p>
+		<button onclick="testNumpad()">Number Pad</button>
+		</div>
+		<hr>
+		<div>
+		<p> Same as the first number pad; however, this time an anonymous function is passed rather than a reference to a function. This concept applies to all dialogs. </p>
+		<button onclick="testNumpad2()">Number Pad</button>
+		</div>
+		<hr>
+		<div>
+		<p> A default hex pad. </p>
+		<button onclick="testHexPad()">Hex Pad</button>
+		</div>
+		<hr>
+		<div>
+		<p> A default selector. </p>
+		<button onclick="testSelector()">Selector</button>
+		</div>
+		<hr>
+		<div>
+		<p> This shows how a selector can be opened from another selector </p>
+		<button onclick="testSelectorWithinSelector()">Selector Within Selector</button>
+		</div>
+		<hr>
+		<div>
+		<p> A default string insertion pad. </p>
+		<button onclick="testStringPad()">String Pad</button>
+		</div>
+		<hr>
+		<div>
+		<p> A default alert message. </p>
+		<button onclick="testAlert1()">Alert 1</button>
+		</div>
+		<hr>
+		<div>
+		<p> A default confirmation message. </p>
+		<button onclick="testAlert2()">Alert 2</button>
+		</div>
+		<hr>
+</body>
+
+<script>
+	function testNumpad() {
+		var numpad = new NumberPad();
+		numpad.open(null, null, "Number Entry Pad", "How many beers to drink?", true, 10, result);
+	}
+	
+	function testNumpad2() {
+		var numpad = new NumberPad();
+		var testStr = " shots to take!";
+		numpad.open(null, null, "Number Entry Pad", "How many shots to take?", true, 10, (function(value) { alert(value + testStr); }));
+	}
+	
+	function testSelector() {
+		var selector = new Selector();
+		selector.open("Selection Panel", [ "temp", "total", "var1", "var2", "average", "value" ], result);
+	}
+	
+	function testSelectorWithinSelector() {
+		var selector = new Selector();
+		selector.open("Selection Panel", [ "temp", "total", "var1", "var2", "average", "value" ], anotherFunc);
+	}
+	
+	function anotherFunc(value) {
+		alert("You chose: " + value);
+		var selector = new Selector();
+		selector.open("Selection Panel", [ "more", "options", "to", "choose", "from" ], result);
+	}
+	
+	function testStringPad() {
+		var stringPad = new StringPad();
+		stringPad.openStringPad("String Constant Entry", "Insert a string.", result);
+	}
+	
+	function testHexPad() {
+		var numPad = new NumberPad();
+		numPad.open(null, null, "Hex Entry Pad", "What memory location to load?", true, 16, result);
+	}
+	
+	function testAlert1() {
+		var alert = new Alert();
+		alert.open("Oh no!", "Peter Piper picked a peck of pickled peppers. A peck of pickled peppers Peter Piper picked. If Peter Piper picked a peck of pickled peppers, Where's the peck of pickled peppers that Peter Piper picked?", true, result);
+	}
+	
+	function testAlert2() {
+		var alert = new Alert();
+		alert.open("Error", "The operation completed successfully.", false, result);
+	}
+	
+	function result(value) {
+		alert("Value: " + value);
+	}
+</script>
+</html>
