@@ -1,5 +1,5 @@
 /**********************************************************************************************
- * Authors: Mitchell Martin, James Miltenburger, Bidur Shrestha, Jonathan Teel Neil Vosburg
+ * Authors: Mitchell Martin, James Miltenberger, Bidur Shrestha, Jonathan Teel, Neil Vosburg
  *
  * Entity: Watson Dialog Library (WatsonDialogs.js)
  *
@@ -78,14 +78,15 @@ function NumberPad() {
 		$( "#numpadDialog" + thisID ).dialog({width: "295px", resizable: false});
 		var row;
 		var iters = [ 3, 3, 3, 3 ];
-		var vals = [ [ ".", "0", "-" ], [ "3", "2", "1", ], [ "6", "5", "4" ], [ "9", "8", "7" ]  ]; 
+		//var vals = [ [ ".", "0", "-" ], [ "3", "2", "1", ], [ "6", "5", "4" ], [ "9", "8", "7" ]  ]; 
+		var vals = [ [ "7", "8", "9" ], [ "4", "5", "6" ], [ "1", "2", "3", ], [ "-", "0", "." ] ];
 		var firstRow;
 		
 		for (var i = 0; i < 4; i++) {
-			row = numpadTable.insertRow();
+			row = numpadTable.insertRow(i);
 			for (var j = 0; j < 3; j++) {
-				cell = row.insertCell();
-				if (i == 0) {
+				cell = row.insertCell(j);
+				if (i == 3) {
 					var id;
 					if (vals[i][j] == ".") id = "numPadNumButtonDecimal" + thisID;
 					else id = "numpadNumButton" + thisID + "-" + vals[i][j];
@@ -105,17 +106,22 @@ function NumberPad() {
 		
 		var funcTable = document.getElementById("numpadFuncTable" + thisID);
 		var button;
-		var buttonIDs = [ "numpadNumButtonCancel", "numpadNumButtonClear", "numpadNumButtonEnter" ];
+		var buttonIDs = [ "numpadNumButtonEnter", "numpadNumButtonClear", "numpadNumButtonCancel" ];
 		
 		for (var i = 0; i < 3; i++) {
-			cell = funcTable.insertRow().insertCell();
+			cell = funcTable.insertRow(i).insertCell();
 			cell.innerHTML = "<button id='" + buttonIDs[i] + thisID + "' class='WatsonLibraryFuncButton'>" + buttonIDs[i].slice(15) + "</button>";
 			button = document.getElementById(buttonIDs[i] + thisID);
-			if (i == 0) addCancelButtonEventListener(buttonIDs[i] + thisID);
+			if (i == 0) addEnterButtonEventListener(buttonIDs[i] + thisID);
 			else if (i == 1) addClearButtonEventListener(buttonIDs[i] + thisID);
-			else addEnterButtonEventListener(buttonIDs[i] + thisID);
+			else addCancelButtonEventListener(buttonIDs[i] + thisID);
 			$( "#" + buttonIDs[i] + thisID).button();
 		}
+		
+		window.onkeypress = function(e) { decimalKeyPressed(e); };
+		window.onkeydown = function(e) { backspaceDown(e); };
+		
+		$( "#numpadInput" + thisID).focus();
 	}
 	
 	function openHexpad(_minValue, _maxValue, title, instruction, callbackFunc) {
@@ -153,14 +159,15 @@ function NumberPad() {
 		
 		$( "#numpadDialog" + thisID ).dialog({width: "295px", resizable: false});
 		var row;
-		var iters = [ 2, 3, 3, 3, 3, 3 ];
-		var vals = [ [ "0", "S" ], ["3", "2", "1" ], ["6", "5", "4"], [ "9", "8", "7", ], [ "C", "B", "A" ], [ "F", "E", "D" ]  ]; 
+		var iters = [ 3, 3, 3, 3, 3, 2 ];
+		//var vals = [ [ "0", "S" ], ["3", "2", "1" ], ["6", "5", "4"], [ "9", "8", "7", ], [ "C", "B", "A" ], [ "F", "E", "D" ]  ];
+		var vals = [ [ "D", "E", "F" ], [ "A", "B", "C" ], [ "7", "8", "9", ], ["4", "5", "6"], ["1", "2", "3" ], [ "S", "0" ] ];
 		var firstRow;
 		
 		for (var i = 0; i < 6; i++) {
-			row = hexpadTable.insertRow();
+			row = hexpadTable.insertRow(i);
 			for (var j = 0; j < iters[i]; j++) {
-				cell = row.insertCell();
+				cell = row.insertCell(j);
 				var id = "numpadNumButton" + thisID + "-" + vals[i][j];
 				cell.innerHTML = "<button id='" + id + "' class='NumpadNumButton'>" + vals[i][j] + "</button>";
 				if (id == "numpadNumButton" + thisID + "-S") {
@@ -173,60 +180,75 @@ function NumberPad() {
 		
 		var funcTable = document.getElementById("numpadFuncTable" + thisID);
 		var button;
-		var buttonIDs = [ "numpadNumButtonCancel", "numpadNumButtonClear", "numpadNumButtonEnter" ];
+		var buttonIDs = [ "numpadNumButtonEnter", "numpadNumButtonClear", "numpadNumButtonCancel" ];
 		
 		for (var i = 0; i < 3; i++) {
-			cell = funcTable.insertRow().insertCell();
+			cell = funcTable.insertRow(i).insertCell();
 			cell.innerHTML = "<button id='" + buttonIDs[i] + thisID + "' class='WatsonLibraryFuncButton'>" + buttonIDs[i].slice(15) + "</button>";
 			button = document.getElementById(buttonIDs[i] + thisID);
-			if (i == 0) { addCancelButtonEventListener(buttonIDs[i] + thisID); button.style.marginBottom = "100px"; }
+			
+			if (i == 0) addEnterButtonEventListener(buttonIDs[i] + thisID);
 			else if (i == 1) addClearButtonEventListener(buttonIDs[i] + thisID);
-			else addEnterButtonEventListener(buttonIDs[i] + thisID);
+			else { addCancelButtonEventListener(buttonIDs[i] + thisID); button.style.marginBottom = "100px"; }
 			$( "#" + buttonIDs[i] + thisID).button();
 		}
+		
+		window.onkeypress = function(e) { hexKeyPressed(e); };
+		window.onkeydown = function(e) { backspaceDown(e); };
+		
+		$( "#numpadInput" + thisID).focus();
 	}
 	
 	function addNumpadButtonEventListener(buttonID, value) {
 		var button = document.getElementById(buttonID);
 		button.addEventListener("click", function() {
-			var input = document.getElementById("numpadInput" + thisID);
-			
-			if (value == "-") {
-				if (input.value.charAt(0) != '-' && input.value != '0') {
-					var temp = input.value;
-					if (boundsCheck("-" + temp) == true) input.value = "-" + temp;
-				}
-				else {
-					var temp = input.value.slice(1);
-					if (boundsCheck(temp) == true) input.value = input.value.slice(1);
-				}
-			}
-			else if (value == ".") {
-				if (input.value.indexOf(".") < 0 && decimalAllowed == true) input.value += value;
-			}
-			else {
-				if (boundsCheck(input.value + value) == true) {
-					if (input.value == "0") input.value = value;
-					else input.value += value;
-				}
-			}
-			
+			numberKeyClick(value);
 			$( "#" + buttonID).blur();
 		});
+	}
+	
+	function numberKeyClick(value) {
+		var input = document.getElementById("numpadInput" + thisID);
+		
+		if (value == "-") {
+			if (input.value == '0') return;
+			
+			if (input.value.charAt(0) != '-') {
+				var temp = input.value;
+				if (boundsCheck("-" + temp) == true) input.value = "-" + temp;
+			}
+			else {
+				var temp = input.value.slice(1);
+				if (boundsCheck(temp) == true) input.value = input.value.slice(1);
+			}
+		}
+		else if (value == ".") {
+			if (input.value.indexOf(".") < 0 && decimalAllowed == true) input.value += value;
+		}
+		else {
+			if (boundsCheck(input.value + value) == true) {
+				if (input.value == "0") input.value = value;
+				else input.value += value;
+			}
+		}
 	}
 	
 	function addHexpadButtonEventListener(buttonID, value) {
 		var button = document.getElementById(buttonID);
 		button.addEventListener("click", function() {
-			var input = document.getElementById("numpadInput" + thisID);
-			
-			if (boundsCheck(input.value + value) == true) {
-				if (input.value == "0") input.value = value;
-				else input.value += value;
-			}
+			hexKeyClick(value);
 			
 			$( "#" + buttonID).blur();
 		});
+	}
+	
+	function hexKeyClick(value) {
+		var input = document.getElementById("numpadInput" + thisID);
+		
+		if (boundsCheck(input.value + value) == true) {
+			if (input.value == "0") input.value = value;
+			else input.value += value;
+		}
 	}
 	
 	function addEnterButtonEventListener(buttonID) {
@@ -272,6 +294,46 @@ function NumberPad() {
 		}
 		
 		return false;
+	}
+	
+	function backspaceDown(event) {
+		var code = event.keyCode || event.which;
+		
+		if (code == 8) {
+			event.preventDefault();
+			var input = document.getElementById("numpadInput" + thisID);
+			if (input.value != "0")	input.value = input.value.slice(0, input.value.length - 1);
+			
+			if (input.value.length == 0) input.value = 0;
+			else if (input.value == "-") input.value = 0;
+		}
+	}
+	
+	function decimalKeyPressed(event) {
+		var code = event.keyCode || event.which;
+	
+		console.log("Code: " + code);
+		if (code == 13) {
+			var input = document.getElementById("numpadInput" + thisID);
+			callback(input.value);
+			$( "#numpadDialog" + thisID).dialog('close');
+		}
+		else if (code == 45) numberKeyClick("-");
+		else if (code == 46) numberKeyClick(".");
+		else if (code >= 48 && code <= 57) numberKeyClick(code - 48);
+	}
+	
+	function hexKeyPressed(event) {
+		var code = event.keyCode || event.which;
+		
+		if (code == 13) {
+			var input = document.getElementById("numpadInput" + thisID);
+			callback(input.value);
+			$( "#numpadDialog" + thisID).dialog('close');
+		}
+		else if (code >= 97 && code <= 102) hexKeyClick(String.fromCharCode(code-32));
+		else if (code >= 65 && code <= 70) hexKeyClick(String.fromCharCode(code));
+		else if (code >= 48 && code <= 57) numberKeyClick(code-48);
 	}
 }
 
