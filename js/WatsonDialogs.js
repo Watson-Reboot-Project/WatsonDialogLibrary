@@ -456,7 +456,7 @@ function StringPad() {
 	 *
 	 * This function sets up this string pad and opens it for the user to see.
 	 */
-	function open(title, instruction, defaultInput, callback) {
+	function open(title, instruction, callback) {
 		var dialogDiv = document.createElement("div");	// dynamically create a div for the dialog
 		dialogDiv.id = "stringPadDialog" + thisID;		// give it a unique ID
 		dialogDiv.setAttribute("title", title);			// give it the associated title
