@@ -65,11 +65,12 @@ function NumberPad() {
 				return;
 			}
 		}
+		/*
 		if (boundsCheck(0) == false) {											// If 0 isn't within bounds, throw an error, because this doesn't make sense
 			alert("Error: Zero must be included within these bounds.");
 			return;
 		}
-		
+		*/
 		callback = callbackFunc;															// assign callback variable
 
 		var dialogDiv = document.createElement("div");										// dynamically create div for the dialog
@@ -79,7 +80,7 @@ function NumberPad() {
 		document.body.appendChild(dialogDiv);												// add the dialog to the document
 		
 		var input = document.getElementById("numpadInput" + thisID);						// grab the input box for the numpad
-		input.value = 0;																	// make it hold 0
+		//input.value = 0;																	// make it hold 0
 			
 		decimalAllowed = _decimalAllowed;
 		
@@ -89,7 +90,7 @@ function NumberPad() {
 		
 		var numpadTable = document.getElementById("numpadTable" + thisID);					// get the table that holds the dialog's keys
 		
-		$( "#numpadDialog" + thisID ).dialog({width: "295px", resizable: false});			// open the dialog
+		$( "#numpadDialog" + thisID ).dialog({width: "295px", modal: true, resizable: false});			// open the dialog
 		
 		/* Number Key Population */
 		
@@ -150,11 +151,12 @@ function NumberPad() {
 				return;
 			}
 		}
+		/*
 		if (boundsCheck(0) == false) {											// make sure 0 is within bounds; otherwise, it wouldn't make sense
 			alert("Error: Zero must be included within these bounds.");
 			return;
 		}
-		
+		*/
 		callback = callbackFunc;
 		
 		var dialogDiv = document.createElement("div");							// dynamically create div for the dialog window
@@ -164,7 +166,7 @@ function NumberPad() {
 		document.body.appendChild(dialogDiv);									// append the dialog to the body of the document
 		
 		var input = document.getElementById("numpadInput" + thisID);			// make '0' appear in the input box
-		input.value = 0;
+		//input.value = 0;
 		
 		var instructDiv = document.getElementById("numpadInstructDiv" + thisID);	// if there is an instruction, set it in the instruction div
 		if (instruction == null) instructDiv.innerHTML = "";
@@ -172,7 +174,7 @@ function NumberPad() {
 		
 		var hexpadTable = document.getElementById("numpadTable" + thisID);			// the buttons are in a table
 		
-		$( "#numpadDialog" + thisID ).dialog({width: "295px", resizable: false});	// open the dialog
+		$( "#numpadDialog" + thisID ).dialog({width: "295px", modal: true, resizable: false});	// open the dialog
 		
 		var row;
 		var iters = [ 3, 3, 3, 3, 3, 2 ];	// this array tells the for loop how many iterations to loop through
@@ -237,6 +239,7 @@ function NumberPad() {
 		
 		if (value == "-") {							// if it's a negative sign that was pressed (toggle it)
 			if (input.value == '0') return;			// if we only have a 0 in the input box, it wouldn't make sense to have -0, return
+			if (input.value == "") return;
 			
 			if (input.value.charAt(0) != '-') {		// if there isn't already a negative sign at the beginning of the number, put one there
 				var temp = input.value;
@@ -249,10 +252,13 @@ function NumberPad() {
 		}
 		else if (value == ".") {					// if it's a decimal that was clicked (.)
 			if (input.value.indexOf(".") < 0 && decimalAllowed == true) input.value += value;	// if there isn't already a decimal, and they are allowed, add it
+			if (input.value == "" && decimalAllowed == true) input.value += "0." + value;
 		}
 		else {										// it must be just a number, tack it on to the end, but check bounds first
 			if (boundsCheck(input.value + value) == true) {
-				if (input.value == "0") input.value = value;	// if just a '0' in the input box, overwrite it
+				if (input.value == "0" && value == "0") return; //input.value += value; //input.value = value;	// if just a '0' in the input box, overwrite it
+				
+				if (input.value == "0") input.value = value;
 				else input.value += value;
 			}
 		}
@@ -296,8 +302,11 @@ function NumberPad() {
 		var button = document.getElementById(buttonID);
 		button.addEventListener("click", function() {
 			var input = document.getElementById("numpadInput" + thisID);
-			callback(input.value);								// call the callback function (specified by the user in the open() function call) with the input box value
+			if (input.value == "") callback(null);
+			else callback(input.value);								// call the callback function (specified by the user in the open() function call) with the input box value
 			$( "#numpadDialog" + thisID).dialog('close');		// close the dialog
+			window.onkeypress = null;
+			window.onkeydown = null;
 		});
 	}
 	
@@ -311,7 +320,9 @@ function NumberPad() {
 		var button = document.getElementById(buttonID);
 		button.addEventListener("click", function() {
 			var input = document.getElementById("numpadInput" + thisID);
-			input.value = "0";				// simply set the input box value to '0'
+			input.value = "";				// simply set the input box value to '0'
+			
+			document.getElementById("numpadNumButtonEnter" + thisID).disabled = true;
 			
 			$( "#" + buttonID).blur();
 		});
@@ -328,6 +339,8 @@ function NumberPad() {
 		button.addEventListener("click", function() {
 			$( "#numpadDialog" + thisID).dialog('close');	// close the dialog
 			callback(null);									// call the callback function (specified by the user in the open() function call) with null
+			window.onkeypress = null;
+			window.onkeydown = null;
 		});
 	}
 	
@@ -371,8 +384,8 @@ function NumberPad() {
 			var input = document.getElementById("numpadInput" + thisID);
 			if (input.value != "0")	input.value = input.value.slice(0, input.value.length - 1);	// if the input value does not equal '0', take the last digit away
 			
-			if (input.value.length == 0) input.value = 0;	// if the length is now 0, put a '0' in the input box
-			else if (input.value == "-") input.value = 0;	// if we are only left with a negative sign (-), place a '0' in the input box (happens when you delete a negative number all the way)
+			//if (input.value.length == 0) input.value = 0;	// if the length is now 0, put a '0' in the input box
+			if (input.value == "-") input.value = "";	// if we are only left with a negative sign (-), place a '0' in the input box (happens when you delete a negative number all the way)
 		}
 	}
 	
@@ -389,6 +402,8 @@ function NumberPad() {
 			var input = document.getElementById("numpadInput" + thisID);
 			callback(input.value);						// call the callback with the input box value
 			$( "#numpadDialog" + thisID).dialog('close');	// close the dialog
+			window.onkeypress = null;
+			window.onkeydown = null;
 		}
 		else if (code == 45) numberKeyClick("-");						// if the code is 45, it's the negative sign; call the numberKeyClick function with '-'
 		else if (code == 46) numberKeyClick(".");						// if the code is 46, it's the decimal; call the numberKeyClick function with '.'
@@ -408,6 +423,8 @@ function NumberPad() {
 			var input = document.getElementById("numpadInput" + thisID);
 			callback(input.value);							// call the callback function with the input box value
 			$( "#numpadDialog" + thisID).dialog('close');	// close the dialog
+			window.onkeypress = null;
+			window.onkeydown = null;
 		}
 		else if (code >= 97 && code <= 102) hexKeyClick(String.fromCharCode(code-32));	// if its 97 - 102, it's the lower case a - f; convert it to its upper case ASCII character representation (subtract 32)
 		else if (code >= 65 && code <= 70) hexKeyClick(String.fromCharCode(code));		// if its 65 - 70, it's the upper case A - F; convert it to its ASCII character representation
@@ -467,7 +484,7 @@ function StringPad() {
 		if (instruction == null) instructDiv.innerHTML = "";						// if the instruction is null, get rid of any text
 		else instructDiv.innerHTML = '<font size="2">' + instruction + '</font>';	// if the instruction isn't null, populate it
 	
-		$( "#stringPadDialog" + thisID ).dialog({width: "400px", resizable: false});	// open the dialog
+		$( "#stringPadDialog" + thisID ).dialog({width: "400px", modal: true, resizable: false});	// open the dialog
 		
 		var input = document.getElementById("stringInput" + thisID);
 		var button;
@@ -533,7 +550,7 @@ function Selector() {
 		dialogDiv.innerHTML = dialogHTML;				// set the inner HTML of this div
 		document.body.appendChild(dialogDiv);			// append the div to the body
 		
-		$( "#selectorDialog" + thisID ).dialog({width: "325px", resizable: false});	// opens the dialog
+		$( "#selectorDialog" + thisID ).dialog({width: "325px", modal: true, resizable: false});	// opens the dialog
 		
 		var select = document.getElementById("selector" + thisID);
 		
@@ -618,7 +635,7 @@ function Alert() {
 		var instructDiv = document.getElementById("alertInstructDiv" + thisID);
 		instructDiv.innerHTML = '<font size="2">' + instruction + '</font>';		// set the instruction div to the message
 		
-		$( "#alertDialog" + thisID ).dialog({width: "295px", resizable: false}); // open the alert dialog
+		$( "#alertDialog" + thisID ).dialog({width: "295px", modal: true, resizable: false}); // open the alert dialog
 		
 		if (bool) {
 			var okButton = document.getElementById("alertOKButton" + thisID);
