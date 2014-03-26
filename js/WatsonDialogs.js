@@ -101,7 +101,7 @@ function NumberPad() {
 			row = numpadTable.insertRow(i);																			// always insert after the last row
 			for (var j = 0; j < 3; j++) {																			// 3 columns to iterate through
 				cell = row.insertCell(j);																			// always insert after the last cell
-
+				
 				var id;																								// id for this particular button
 				if (vals[i][j] == ".") id = "numPadNumButtonDecimal" + thisID;										// we have to treat the decimal special (can't have '.' in ID)
 				else id = "numpadNumButton" + thisID + "-" + vals[i][j];											// standard ID format
