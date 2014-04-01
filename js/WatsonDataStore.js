@@ -10,8 +10,9 @@
 function DataStore() {
 	var store = true;									// assume this platform is capable of storage
 	
-	this.saveExerciseData = saveExerciseData();
-	this.loadExerciseData = loadExerciseData();
+	this.saveExerciseData = saveExerciseData;
+	this.loadExerciseData = loadExerciseData;
+	this.submitExercise = submitExercise;
 	
 	if(typeof(Storage) === "undefined")					// test to see if session storage is available for this platform
 	{
@@ -44,5 +45,14 @@ function DataStore() {
 		
 		var key = "WatsonChapter" + chapter + "Exercise" + exercise;		// Example: WatsonChapter12Exercise3
 		return localStorage.getItem(key);									// return this key's contents
+	}
+	
+	/*
+	 * submitExercise()
+	 *
+	 * Brings up the default mail client using 'mailto'.
+	 */
+	function submitExercise(email, chapter, exercise, data) {
+		window.location = "mailto:" + email + "?Subject=Watson Exercise Submission: Ch" + chapter + " Ex" + exercise + "&body=" + data;
 	}
 }
