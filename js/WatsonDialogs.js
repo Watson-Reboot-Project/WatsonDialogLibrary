@@ -90,7 +90,7 @@ function NumberPad() {
 		
 		var numpadTable = document.getElementById("numpadTable" + thisID);					// get the table that holds the dialog's keys
 		
-		$( "#numpadDialog" + thisID ).dialog({width: "295px", modal: true, resizable: false});			// open the dialog
+		$( "#numpadDialog" + thisID ).dialog({width: "295px", modal: true, resizable: false, position: "center"});			// open the dialog
 		
 		/* Number Key Population */
 		
@@ -174,7 +174,7 @@ function NumberPad() {
 		
 		var hexpadTable = document.getElementById("numpadTable" + thisID);			// the buttons are in a table
 		
-		$( "#numpadDialog" + thisID ).dialog({width: "295px", modal: true, resizable: false});	// open the dialog
+		$( "#numpadDialog" + thisID ).dialog({width: "295px", modal: true, resizable: false, position: "center"});	// open the dialog
 		
 		var row;
 		var iters = [ 3, 3, 3, 3, 3, 2 ];	// this array tells the for loop how many iterations to loop through
@@ -473,18 +473,19 @@ function StringPad() {
 	 *
 	 * This function sets up this string pad and opens it for the user to see.
 	 */
-	function open(title, instruction, callback) {
+	function open(title, instruction, _callback) {
 		var dialogDiv = document.createElement("div");	// dynamically create a div for the dialog
 		dialogDiv.id = "stringPadDialog" + thisID;		// give it a unique ID
 		dialogDiv.setAttribute("title", title);			// give it the associated title
 		dialogDiv.innerHTML = dialogHTML;				// populate it with the inner HTML
 		document.body.appendChild(dialogDiv);			// append it to the document's body
+		callback = _callback;
 		
 		var instructDiv = document.getElementById("stringPadInstructDiv" + thisID);	// grab the div that holds the instruction
 		if (instruction == null) instructDiv.innerHTML = "";						// if the instruction is null, get rid of any text
 		else instructDiv.innerHTML = '<font size="2">' + instruction + '</font>';	// if the instruction isn't null, populate it
 	
-		$( "#stringPadDialog" + thisID ).dialog({width: "400px", modal: true, resizable: false});	// open the dialog
+		$( "#stringPadDialog" + thisID ).dialog({width: "400px", modal: true, resizable: false, position: "center"});	// open the dialog
 		
 		var input = document.getElementById("stringInput" + thisID);
 		var button;
@@ -493,7 +494,7 @@ function StringPad() {
 		
 		// the okay button closes the dialog and calls the callback function specified by the user with the input value currently entered in the input box
 		button = document.getElementById("stringPadOkay" + thisID);
-		button.addEventListener("click", function() { $( "#stringPadDialog" + thisID).dialog('close'); callback(input.value); });
+		button.addEventListener("click", function() { $( "#stringPadDialog" + thisID).dialog('close'); callback(input.value); window.onkeypress = null; });
 		$( "#stringPadOkay" + thisID).button();		// make the button pretty
 	
 		// the clear button clears the input box
@@ -503,8 +504,20 @@ function StringPad() {
 		
 		// the cancel button closes the dialog and calls the call back function with null as its parameter
 		button = document.getElementById("stringPadCancel" + thisID);
-		button.addEventListener("click", function() { $( "#stringPadDialog" + thisID).dialog('close'); callback(null); });
+		button.addEventListener("click", function() { $( "#stringPadDialog" + thisID).dialog('close'); callback(null); window.onkeypress = null; });
 		$( "#stringPadCancel" + thisID).button();	// make the button pretty
+	
+		window.onkeypress = function(e) { keyPress(e); };
+	}
+	
+	function keyPress(e) {
+		var code = event.keyCode || event.which;
+		if (code == 13) {
+			var input = document.getElementById("stringInput" + thisID);
+			$( "#stringPadDialog" + thisID).dialog('close');
+			callback(input.value);
+			window.onkeypress = null;
+		}
 	}
 }
 
@@ -521,11 +534,31 @@ function Selector() {
 	Selector.nextDialogID++;				// increase the value of this static variable
 	var callback;							// a variable to hold the call back function given by user in open function
 	
+	var selectedItem = null;
+	
+	/*
 	// the inner HTML to populate the dialog's div
 	var dialogHTML =
 		'<table id="selectorTable">\
 		<tr>\
 		<td><select id="selector' + thisID + '" size="5" style="width:200px;"></select></td>\
+		<td>\
+		<table id="innerTable">\
+		<tr>\
+		<td><button id="selectorOkay' + thisID + '" class="WatsonLibraryFuncButton">Okay</button></td>\
+		</tr>\
+		<tr>\
+		<td><button id="selectorCancel' + thisID + '" class="WatsonLibraryFuncButton">Cancel</button></td>\
+		</tr>\
+		</table>\
+		</td>\
+		</table>';
+	*/
+	
+	var dialogHTML =
+		'<table id="selectorTable">\
+		<tr>\
+		<td style="width:200px;"><ol id="selector' + thisID + '" class="WatsonSelector" style="overflow-y: scroll; height: 100px;"> </ol></td>\
 		<td>\
 		<table id="innerTable">\
 		<tr>\
@@ -543,24 +576,44 @@ function Selector() {
 	 *
 	 *	Opens the selector
 	 */
-	function open(title, options, callback) {
+	function open(title, options, _callback) {
 		var dialogDiv = document.createElement("div");	// dynamically create div for the dialog
 		dialogDiv.id = "selectorDialog" + thisID;		// give the div a unique id
 		dialogDiv.setAttribute("title", title);			// set the title accordingly
 		dialogDiv.innerHTML = dialogHTML;				// set the inner HTML of this div
 		document.body.appendChild(dialogDiv);			// append the div to the body
+		callback = _callback;
 		
-		$( "#selectorDialog" + thisID ).dialog({width: "325px", modal: true, resizable: false});	// opens the dialog
+		$( "#selectorDialog" + thisID ).dialog({width: "325px", modal: true, resizable: false, position: "center"});	// opens the dialog
 		
 		var select = document.getElementById("selector" + thisID);
 		
-		/* Dynamically make options and populate the select object with these options */
+		/* Dynamically make options and populate the select object with these options 
 		var len = options.length;
 		for (var i = 0; i < len; i++) {
 			var option = document.createElement("option");	// create a new option object
 			option.text = options[i];						// give the option the associated text
 			select.add(option);								// add it to the selector
 		}
+		select.selectedIndex = 0;
+		*/
+		
+		var len = options.length;
+		for (var i = 0; i < len; i++) {
+			var newNumberListItem = document.createElement("li");
+			newNumberListItem.ondblclick = function() {
+				OkayButton();
+			}
+			newNumberListItem.className += " ui-widget-content";
+            var numberListValue = document.createTextNode(options[i]);
+            newNumberListItem.appendChild(numberListValue);
+            select.appendChild(newNumberListItem);
+		}
+		$( "#selector" + thisID).selectable({
+			selected: function(event, ui) {
+				selectedItem = ui.selected.textContent;
+			}
+		});
 		
 		/* Assign button listeners to Okay and Cancel buttons */
 		
@@ -568,13 +621,18 @@ function Selector() {
 		
 		// Okay button closes the dialog and calls the call back function with the selected option as its parameter
 		button = document.getElementById("selectorOkay" + thisID);
-		button.addEventListener("click", function() { $( "#selectorDialog" + thisID).dialog('close'); callback(select.options[select.selectedIndex].text); });
+		button.addEventListener("click", OkayButton);
 		$( "#selectorOkay" + thisID).button();		// make the button pretty
 		
 		// Cancel button closes the dialog and calls the call back function with null as its parameter
 		button = document.getElementById("selectorCancel" + thisID);
 		button.addEventListener("click", function() { $( "#selectorDialog" + thisID).dialog('close'); callback(null); });
 		$( "#selectorCancel" + thisID).button();	// make the button pretty
+	}
+	
+	function OkayButton() {
+		$( "#selectorDialog" + thisID).dialog('close');
+		callback(selectedItem);
 	}
 }
 
@@ -635,7 +693,7 @@ function Alert() {
 		var instructDiv = document.getElementById("alertInstructDiv" + thisID);
 		instructDiv.innerHTML = '<font size="2">' + instruction + '</font>';		// set the instruction div to the message
 		
-		$( "#alertDialog" + thisID ).dialog({width: "295px", modal: true, resizable: false}); // open the alert dialog
+		$( "#alertDialog" + thisID ).dialog({width: "295px", modal: true, resizable: false, position: "center"}); // open the alert dialog
 		
 		if (bool) {
 			var okButton = document.getElementById("alertOKButton" + thisID);
