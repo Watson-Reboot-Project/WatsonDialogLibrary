@@ -320,10 +320,7 @@ function NumberPad() {
 		var button = document.getElementById(buttonID);
 		button.addEventListener("click", function() {
 			var input = document.getElementById("numpadInput" + thisID);
-			input.value = "";				// simply set the input box value to '0'
-			
-			document.getElementById("numpadNumButtonEnter" + thisID).disabled = true;
-			
+			input.value = "";				// simply set the input box value to '0'			
 			$( "#" + buttonID).blur();
 		});
 	}
