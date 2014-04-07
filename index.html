@@ -60,21 +60,6 @@
 		<p> Submission Test. (Not a part of Watson Dialogs) : Should bring up default e-mail client. </p>
 		<button onclick="submitTest()">Submit</button>
 		</div>
-		<hr>
-		<p> A lag test without jQueryUI (pure JavaScript) </p>
-		<input id="lagInput" value="" style="margin-left: 15px; width:215px"></input><br>
-		<button onclick="lagTest(0)" style="margin-left: 25px; margin-top: 15px; padding:15px">0</button>
-		<button onclick="lagTest(1)" style="margin-left: 25px; margin-top: 10px; padding:15px">1</button>
-		<button onclick="lagTest(2)" style="margin-left: 25px; margin-top: 10px; padding:15px">2</button><br>
-		<button onclick="lagTest(3)" style="margin-left: 25px; margin-top: 10px; padding:15px">3</button>
-		<button onclick="lagTest(4)" style="margin-left: 25px; margin-top: 10px; padding:15px">4</button>
-		<button onclick="lagTest(5)" style="margin-left: 25px; margin-top: 10px; padding:15px">5</button><br>
-		<button onclick="lagTest(6)" style="margin-left: 25px; margin-top: 10px; padding:15px">6</button>
-		<button onclick="lagTest(7)" style="margin-left: 25px; margin-top: 10px; padding:15px">7</button>
-		<button onclick="lagTest(8)" style="margin-left: 25px; margin-top: 10px; padding:15px">8</button><br>
-		<br>
-		<br>
-		<br>
 </body>
 
 <script>
@@ -148,11 +133,6 @@
 	
 	function result(value) {
 		alert("Value: " + value);
-	}
-	
-	var input = document.getElementById("lagInput");
-	function lagTest(num) {
-		input.value += num;
 	}
 </script>
 </html>
