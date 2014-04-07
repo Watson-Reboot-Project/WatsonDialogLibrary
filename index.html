@@ -16,42 +16,42 @@
 <title>Watson Dialog Library</title>
 </head>
 <body>
-		<div>
+		<div id="testNumberPadDiv1">
 		<p> Default number pad with a reference to the function to be called when "Enter is clicked </p>
 		<button onclick="testNumpad()">Number Pad</button>
 		</div>
 		<hr>
-		<div>
+		<div id="testNumberPadDiv2">
 		<p> Same as the first number pad; however, this time an anonymous function is passed rather than a reference to a function. This concept applies to all dialogs. </p>
 		<button onclick="testNumpad2()">Number Pad</button>
 		</div>
 		<hr>
-		<div>
+		<div id="testHexPadDiv">
 		<p> A default hex pad. </p>
 		<button onclick="testHexPad()">Hex Pad</button>
 		</div>
 		<hr>
-		<div>
+		<div id="testSelectorDiv1">
 		<p> A default selector. </p>
 		<button onclick="testSelector()">Selector</button>
 		</div>
 		<hr>
-		<div>
+		<div id="testSelectorDiv2">
 		<p> This shows how a selector can be opened from another selector </p>
 		<button onclick="testSelectorWithinSelector()">Selector Within Selector</button>
 		</div>
 		<hr>
-		<div>
+		<div id="testStringPadDiv">
 		<p> A default string insertion pad. </p>
 		<button onclick="testStringPad()">String Pad</button>
 		</div>
 		<hr>
-		<div>
+		<div id="testAlert1">
 		<p> A default alert message. </p>
 		<button onclick="testAlert1()">Alert 1</button>
 		</div>
 		<hr>
-		<div>
+		<div id="testAlert2">
 		<p> A default confirmation message. </p>
 		<button onclick="testAlert2()">Alert 2</button>
 		</div>
@@ -61,6 +61,20 @@
 		<button onclick="submitTest()">Submit</button>
 		</div>
 		<hr>
+		<p> A lag test without jQueryUI (pure JavaScript) </p>
+		<input id="lagInput" value="" style="margin-left: 15px; width:215px"></input><br>
+		<button onclick="lagTest(0)" style="margin-left: 25px; margin-top: 15px; padding:15px">0</button>
+		<button onclick="lagTest(1)" style="margin-left: 25px; margin-top: 10px; padding:15px">1</button>
+		<button onclick="lagTest(2)" style="margin-left: 25px; margin-top: 10px; padding:15px">2</button><br>
+		<button onclick="lagTest(3)" style="margin-left: 25px; margin-top: 10px; padding:15px">3</button>
+		<button onclick="lagTest(4)" style="margin-left: 25px; margin-top: 10px; padding:15px">4</button>
+		<button onclick="lagTest(5)" style="margin-left: 25px; margin-top: 10px; padding:15px">5</button><br>
+		<button onclick="lagTest(6)" style="margin-left: 25px; margin-top: 10px; padding:15px">6</button>
+		<button onclick="lagTest(7)" style="margin-left: 25px; margin-top: 10px; padding:15px">7</button>
+		<button onclick="lagTest(8)" style="margin-left: 25px; margin-top: 10px; padding:15px">8</button><br>
+		<br>
+		<br>
+		<br>
 </body>
 
 <script>
@@ -72,50 +86,59 @@
 	*/
 	
 	function testNumpad() {
+		var div = document.getElementById("testNumberPadDiv1");
 		var numpad = new NumberPad();
-		numpad.open(null, null, "Number Entry Pad", "How many beers to drink?", true, 10, result);
+		numpad.open(null, null, "Number Entry Pad", "How many beers to drink?", true, 10, result, div);
 	}
 	
 	function testNumpad2() {
+		var div = document.getElementById("testNumberPadDiv2");
 		var numpad = new NumberPad();
 		var testStr = " shots to take!";
-		numpad.open(null, null, "Number Entry Pad", "How many shots to take?", true, 10, (function(value) { alert(value + testStr); }));
+		numpad.open(null, null, "Number Entry Pad", "How many shots to take?", true, 10, (function(value) { alert(value + testStr); }), div);
 	}
 	
 	function testSelector() {
+		var div = document.getElementById("testSelectorDiv1");
 		var selector = new Selector();
-		selector.open("Selection Panel", [ "temp", "total", "var1", "var2", "average", "value", "testing", "scrollbar", "yes", "no" ], result);
+		selector.open("Selection Panel", [ "temp", "total", "var1", "var2", "average", "value", "testing", "scrollbar", "yes", "no" ], result, div);
 	}
 	
 	function testSelectorWithinSelector() {
+		var div = document.getElementById("testSelectorDiv2");
 		var selector = new Selector();
-		selector.open("Selection Panel", [ "temp", "total", "var1", "var2", "average", "value" ], anotherFunc);
+		selector.open("Selection Panel", [ "temp", "total", "var1", "var2", "average", "value" ], anotherFunc, div);
 	}
 	
 	function anotherFunc(value) {
 		alert("You chose: " + value);
+		var div = document.getElementById("testSelectorDiv2");
 		var selector = new Selector();
-		selector.open("Selection Panel", [ "more", "options", "to", "choose", "from" ], result);
+		selector.open("Selection Panel", [ "more", "options", "to", "choose", "from" ], result, div);
 	}
 	
 	function testStringPad() {
+		var div = document.getElementById("testStringPadDiv");
 		var stringPad = new StringPad();
-		stringPad.open("String Constant Entry", "Insert a string.", result);
+		stringPad.open("String Constant Entry", "Insert a string.", result, div);
 	}
 	
 	function testHexPad() {
+		var div = document.getElementById("testHexPadDiv");
 		var numPad = new NumberPad();
-		numPad.open(null, null, "Hex Entry Pad", "What memory location to load?", true, 16, result);
+		numPad.open(null, null, "Hex Entry Pad", "What memory location to load?", true, 16, result, div);
 	}
 	
 	function testAlert1() {
+		var div = document.getElementById("testAlert1");
 		var alert = new Alert();
-		alert.open("Oh no!", "Peter Piper picked a peck of pickled peppers. A peck of pickled peppers Peter Piper picked. If Peter Piper picked a peck of pickled peppers, Where's the peck of pickled peppers that Peter Piper picked?", true, result);
+		alert.open("Oh no!", "Peter Piper picked a peck of pickled peppers. A peck of pickled peppers Peter Piper picked. If Peter Piper picked a peck of pickled peppers, Where's the peck of pickled peppers that Peter Piper picked?", true, result, div);
 	}
 	
 	function testAlert2() {
+		var div = document.getElementById("testAlert2");
 		var alert = new Alert();
-		alert.open("Error", "The operation completed successfully.", false, result);
+		alert.open("Error", "The operation completed successfully.", false, result, div);
 	}
 	
 	function submitTest() {
@@ -125,6 +148,11 @@
 	
 	function result(value) {
 		alert("Value: " + value);
+	}
+	
+	var input = document.getElementById("lagInput");
+	function lagTest(num) {
+		input.value += num;
 	}
 </script>
 </html>
