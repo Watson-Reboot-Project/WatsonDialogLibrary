@@ -73,7 +73,7 @@
 	function testNumpad() {
 		var div = document.getElementById("testNumberPadDiv1");
 		var numpad = new NumberPad();
-		numpad.open(null, null, "Number Entry Pad", "How many beers to drink?", true, 10, result, div);
+		numpad.open(-32768, 32767, "Number Entry Pad", "How many beers to drink?", true, 10, result, div);
 	}
 	
 	function testNumpad2() {

@@ -353,12 +353,12 @@ function NumberPad() {
 	}
 	
 	function enterFunc() {
+		window.onkeypress = null;
+		window.onkeydown = null;
 		var input = document.getElementById("numpadInput" + thisID);
 		if (input.value == "") callback(null);
 		else callback(input.value);								// call the callback function (specified by the user in the open() function call) with the input box value
 		$( "#numpadDialog" + thisID).dialog('close');		// close the dialog
-		window.onkeypress = null;
-		window.onkeydown = null;
 	}
 	
 	/*
@@ -489,10 +489,10 @@ function NumberPad() {
 	
 		if (code == 13) {								// if the code is 13, the "Enter" key was pressed
 			var input = document.getElementById("numpadInput" + thisID);
-			callback(input.value);						// call the callback with the input box value
-			$( "#numpadDialog" + thisID).dialog('close');	// close the dialog
 			window.onkeypress = null;
 			window.onkeydown = null;
+			callback(input.value);						// call the callback with the input box value
+			$( "#numpadDialog" + thisID).dialog('close');	// close the dialog
 		}
 		else if (code == 45) numberKeyClick("-");						// if the code is 45, it's the negative sign; call the numberKeyClick function with '-'
 		else if (code == 46) numberKeyClick(".");						// if the code is 46, it's the decimal; call the numberKeyClick function with '.'
@@ -510,10 +510,10 @@ function NumberPad() {
 		
 		if (code == 13) {									// 13 is enter
 			var input = document.getElementById("numpadInput" + thisID);
-			callback(input.value);							// call the callback function with the input box value
-			$( "#numpadDialog" + thisID).dialog('close');	// close the dialog
 			window.onkeypress = null;
 			window.onkeydown = null;
+			callback(input.value);							// call the callback function with the input box value
+			$( "#numpadDialog" + thisID).dialog('close');	// close the dialog
 		}
 		else if (code >= 97 && code <= 102) hexKeyClick(String.fromCharCode(code-32));	// if its 97 - 102, it's the lower case a - f; convert it to its upper case ASCII character representation (subtract 32)
 		else if (code >= 65 && code <= 70) hexKeyClick(String.fromCharCode(code));		// if its 65 - 70, it's the upper case A - F; convert it to its ASCII character representation
