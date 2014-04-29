@@ -86,7 +86,7 @@
 	function testSelector() {
 		var div = document.getElementById("testSelectorDiv1");
 		var selector = new Selector();
-		selector.open("Selection Panel", [ "temp", "total", "var1", "var2", "average", "value", "testing", "scrollbar", "yes", "no" ], result, div);
+		selector.open("Selection Panel", [ "temp", "total", "var1", "var2", "average", "value", "testing", "scrollbar", "yes", "no", "more", "options", "all", "the", "options!" ], result, div);
 	}
 	
 	function testSelectorWithinSelector() {
@@ -134,5 +134,8 @@
 	function result(value) {
 		alert("Value: " + value);
 	}
+	
+	//document.onkeypress = function(e) { console.log("Ha"); e.preventDefault(); }
+	
 </script>
 </html>
