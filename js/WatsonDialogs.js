@@ -766,7 +766,7 @@ function Selector() {
 				items[selectedIndex - 1].className += " ui-selected ";
 				selectedItem = items[selectedIndex - 1].textContent;
 				selectedIndex--;
-				select.scrollTop = select.scrollTop - 21;
+				select.scrollTop = selectedIndex * 21;
 			}
 			
 			evt.preventDefault();
@@ -782,7 +782,7 @@ function Selector() {
 				items[selectedIndex + 1].className += " ui-selected ";
 				selectedItem = items[selectedIndex + 1].textContent;
 				selectedIndex++;
-				select.scrollTop = select.scrollTop + 21;
+				select.scrollTop = selectedIndex * 21;
 			}
 			
 			evt.preventDefault();
