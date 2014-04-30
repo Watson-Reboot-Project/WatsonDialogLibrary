@@ -802,18 +802,27 @@ function Selector() {
 	function highlightOptionByKey(code) {
 		var select = document.getElementById("selector" + thisID);
 
-		for (var i = 0; i < len; i++) {	
-			if (items[i].textContent.charAt(0) == code) {
-				if (selectedIndex == i) continue;
-				
-				if (selectedIndex != -1) items[selectedIndex].className = items[selectedIndex].className.replace("ui-selected", "");
-				items[i].className += " ui-selected ";
-				selectedItem = items[i].textContent;
-				selectedIndex = i;
-				select.scrollTop = i * 21;
-				break;
+		var i;
+		if (selectedIndex == -1) i = 0;
+		else i = selectedIndex;
+		
+		for (var j = 0; j < 2; j++) {
+			for ( ; i < len; i++) {	
+				//console.log("Key to look for: " + code + " :: Current key: " + items[i].textContent.charAt(0));
+				if (items[i].textContent.charAt(0) == code) {
+					if (selectedIndex == i) continue;
+					
+					if (selectedIndex != -1) items[selectedIndex].className = items[selectedIndex].className.replace("ui-selected", "");
+					items[i].className += " ui-selected ";
+					selectedItem = items[i].textContent;
+					selectedIndex = i;
+					select.scrollTop = i * 21;
+										
+					return;
+				}
 			}
-		}
+			i = 0;
+		} 
 	}
 }
 
