@@ -86,7 +86,7 @@
 	function testSelector() {
 		var div = document.getElementById("testSelectorDiv1");
 		var selector = new Selector();
-		selector.open("Selection Panel", [ "temp", "total", "var1", "var2", "average", "value", "testing", "scrollbar", "yes", "no", "more", "options", "all", "the", "options!" ], result, div);
+		selector.open("Selection Panel", [ "temp", "total", "var1", "var2", "average", "value" ], result, div);
 	}
 	
 	function testSelectorWithinSelector() {
@@ -123,7 +123,7 @@
 	function testAlert2() {
 		var div = document.getElementById("testAlert2");
 		var alert = new Alert();
-		alert.open("Error", "The operation completed successfully.", false, result, div);
+		alert.open("Warning!", "All unsaved data will be lossed. Are you sure you want to continue?", false, result, div);
 	}
 	
 	function submitTest() {

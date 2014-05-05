@@ -355,10 +355,10 @@ function NumberPad() {
 	function enterFunc() {
 		document.onkeypress = null;
 		document.onkeydown = null;
+		$( "#numpadDialog" + thisID).dialog('close');		// close the dialog
 		var input = document.getElementById("numpadInput" + thisID);
 		if (input.value == "") callback(null);
 		else callback(input.value);								// call the callback function (specified by the user in the open() function call) with the input box value
-		$( "#numpadDialog" + thisID).dialog('close');		// close the dialog
 	}
 	
 	/*
@@ -491,8 +491,8 @@ function NumberPad() {
 			var input = document.getElementById("numpadInput" + thisID);
 			document.onkeypress = null;
 			document.onkeydown = null;
-			callback(input.value);						// call the callback with the input box value
 			$( "#numpadDialog" + thisID).dialog('close');	// close the dialog
+			callback(input.value);						// call the callback with the input box value
 		}
 		else if (code == 45) numberKeyClick("-");						// if the code is 45, it's the negative sign; call the numberKeyClick function with '-'
 		else if (code == 46) numberKeyClick(".");						// if the code is 46, it's the decimal; call the numberKeyClick function with '.'
@@ -539,8 +539,8 @@ function StringPad() {
 		'<table id="selectorTable">\
 		<tr>\
 		<td>\
-		<div id="stringPadInstructDiv' + thisID + '"></div>\
-		<input id="stringInput' + thisID + '" style="width:270px"></select>\
+		<div id="stringPadInstructDiv' + thisID + '" style="width:175; max-height: 60px; white-space: pre-wrap; margin-bottom: 5px; overflow-y: auto;"></div>\
+		<input id="stringInput' + thisID + '" style="width:175px"></select>\
 		</td>\
 		<td>\
 		<table id="innerTable">\
@@ -575,7 +575,7 @@ function StringPad() {
 		else instructDiv.innerHTML = '<font size="2">' + instruction + '</font>';	// if the instruction isn't null, populate it
 	
 		var centerAt = (div ? div : window);
-		$( "#stringPadDialog" + thisID ).dialog({width: "400px", modal: true, resizable: false, position: { my: "center", at: "center", of: centerAt } });	// open the dialog
+		$( "#stringPadDialog" + thisID ).dialog({width: "300px", modal: true, resizable: false, position: { my: "center", at: "center", of: centerAt } });	// open the dialog
 
 		var input = document.getElementById("stringInput" + thisID);
 		var button;
