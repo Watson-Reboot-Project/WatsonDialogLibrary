@@ -66,7 +66,7 @@ function DataStore() {
 	function eraseExerciseData(chapter, exercise) { 
         if (store == false) return null; 
           
-        var key = "WatsonChapter:" + chapter + ";Exercise:" + exercise; 
+        var key = "WatsonChapter" + chapter + "Exercise" + exercise;
         localStorage.removeItem(key); 
     } 
 	
